@@ -1,0 +1,39 @@
+kind: pipeline
+type: docker
+name: ci/cd
+clone:
+  disable: true
+steps:
+  - name: clone
+    image: wwma/drone-github-clone
+    settings:
+      SSH_KEY:
+        from_secret: ssh_key
+  - name: build
+    image: postgres:15
+    environment:
+      db_host:
+        from_secret: db_host
+      db_port:
+        from_secret: db_port
+      db_name:
+        from_secret: db_name
+      db_user:
+        from_secret: db_user
+      db_password:
+        from_secret: db_password
+    commands:
+      - sh backup_script.sh
+  - name: oss
+    image: wwma/drone-aliyun-oss
+    settings:
+      endpoint:
+        from_secret: endpoint
+      ACCESS_KEY_ID:
+        from_secret: accessKeyID
+      ACCESS_KEY_SECRET:
+        from_secret: accessKeySecret
+      BUCKET_NAME:
+        from_secret: bucketName
+      target: backup-pg
+      source: backup
