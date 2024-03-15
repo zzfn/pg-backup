@@ -16,7 +16,7 @@ mkdir -p $backup_dir
 
 # 使用 pg_dump 进行备份
 if [ -n "$db_name" ]; then
-    pg_dump -h $db_host -p $db_port -U $db_user -d $db_name > $backup_file
+    pg_dump -h $db_host -p $db_port -U $db_user -d $db_name -C > $backup_file
 else
     pg_dumpall -h $db_host -p $db_port -U $db_user > $backup_file
 fi
