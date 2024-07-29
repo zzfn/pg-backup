@@ -9,7 +9,7 @@ steps:
     settings:
       SSH_KEY:
         from_secret: ssh_key
-  - name: build
+  - name: backup
     image: postgres:16.2
     environment:
       db_host:
@@ -24,7 +24,7 @@ steps:
         from_secret: db_password
     commands:
       - sh backup_script.sh
-  - name: oss
+  - name: upload-oss
     image: wwma/drone-aliyun-oss
     settings:
       endpoint:
